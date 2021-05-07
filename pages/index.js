@@ -3,10 +3,6 @@ import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import { forwardRef, useEffect, useRef, useState } from "react";
 
-if (typeof window !== "undefined") {
-	const { ScrollTrigger } = require("gsap/ScrollTrigger");
-	gsap.registerPlugin(ScrollTrigger);
-}
 const icon = {
 	hidden: {
 		opacity: 0,
@@ -25,58 +21,66 @@ export default function Home() {
 	const animSection = useRef();
 
 	useEffect(() => {
-		animate();
-	}, []);
+		if (typeof window !== "undefined" && typeof document !== "undefined") {
+			const { ScrollTrigger } = require("gsap/ScrollTrigger");
+			gsap.registerPlugin(ScrollTrigger);
 
-	function animate() {
-		let tl = gsap.timeline({
-			scrollTrigger: {
-				trigger: animSection.current,
-				start: "top top",
-				pin: true,
-				scrub: 1,
-				end: "+=8000",
-				onToggle: (self) => {
-					setActive(self.isActive);
+			let tl = gsap.timeline({
+				scrollTrigger: {
+					trigger: animSection.current,
+					start: "top top",
+					pin: true,
+					scrub: 1,
+					end: "+=8000",
+					onToggle: (self) => {
+						setActive(self.isActive);
+					},
 				},
-			},
-		});
-		tl.from("#firstP p", {
-			y: 160,
-			stagger: 0.08,
-			duration: 3,
-		});
-		tl.to("#firstP p", {
-			y: -160,
-			stagger: 0.08,
-			duration: 3,
-		});
-		tl.from("#secondP p", {
-			y: 160,
-			stagger: 0.08,
-			duration: 3,
-		});
-		tl.to("#secondP p", {
-			y: -160,
-			stagger: 0.08,
-			duration: 3,
-		});
-		tl.from(
-			"#btn",
-			{
-				y: 400,
+			});
+			tl.from("#firstP p", {
+				y: 160,
 				stagger: 0.08,
 				duration: 3,
-			},
-			"-=5"
-		);
-		tl.to("#btn", {
-			y: -400,
-			stagger: 0.08,
-			duration: 3,
-			opacity: 0,
-		});
-	}
+			});
+			tl.to("#firstP p", {
+				y: -160,
+				stagger: 0.08,
+				duration: 3,
+			});
+			tl.from("#secondP p", {
+				y: 160,
+				stagger: 0.08,
+				duration: 3,
+			});
+			tl.to("#secondP p", {
+				y: -160,
+				stagger: 0.08,
+				duration: 3,
+			});
+			tl.from(
+				"#btn",
+				{
+					y: 400,
+					stagger: 0.08,
+					duration: 3,
+				},
+				"-=5"
+			);
+			tl.to("#btn", {
+				y: -400,
+				stagger: 0.08,
+				duration: 3,
+				opacity: 0,
+			});
+
+			return () => {
+				console.log("kjasdf");
+				tl.kill();
+			};
+		}
+	}, []);
+
+	function animate() {}
 
 	return (
 		<>
